@@ -9,8 +9,13 @@ const generateId = (): string => {
   return Math.random().toString(36).substring(2, 9);
 };
 
-export const useWorklog = () => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+export const useWorklog = (initialDate?: string) => {
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    if (initialDate) {
+      return new Date(initialDate + 'T00:00:00');
+    }
+    return new Date();
+  });
   const [records, setRecords] = useState<Record<string, DayRecord>>({});
 
   // Load from localStorage on mount
