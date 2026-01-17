@@ -1,4 +1,6 @@
-import { Target, ListTodo, Sparkles } from 'lucide-react';
+import { Target, ListTodo, Sparkles, CalendarDays } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useWorklog } from '@/hooks/useWorklog';
 import { DateHeader } from '@/components/DateHeader';
 import { StatsOverview } from '@/components/StatsOverview';
@@ -7,8 +9,13 @@ import { GoalItem } from '@/components/GoalItem';
 import { TaskItem } from '@/components/TaskItem';
 import { AddItemInput } from '@/components/AddItemInput';
 import { NotesSection } from '@/components/NotesSection';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const initialDate = location.state?.date;
+  
   const {
     currentDate,
     currentRecord,
@@ -27,21 +34,32 @@ const Index = () => {
     totalTasks,
     achievedGoals,
     totalGoals,
-  } = useWorklog();
+  } = useWorklog(initialDate);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Sparkles className="w-6 h-6 text-primary" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">工作日志</h1>
+                <p className="text-sm text-muted-foreground">记录每一天的成长</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">工作日志</h1>
-              <p className="text-sm text-muted-foreground">记录每一天的成长</p>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/calendar')}
+              className="gap-2"
+            >
+              <CalendarDays className="w-4 h-4" />
+              <span className="hidden sm:inline">日历</span>
+            </Button>
           </div>
         </div>
       </header>
